@@ -97,15 +97,6 @@ namespace ecpp {
             alternate_opendrain = 20, // Alternate Open Drain (MODE=10 TYPE=1 PUP=00)
         };
 
-        // TODO: Find a proper place for this, maybe in ecpp lib.
-        // Using de Bruijn Sequences to Index a 1 in a Computer Word:
-        // http://supertech.csail.mit.edu/papers/debruijn.pdf
-        static constexpr unsigned int deBruijn[] = {0u, 1u, 28u, 2u, 29u, 14u, 24u, 3u, 30u, 22u, 20u, 15u, 25u, 17u, 4u, 8u,
-                                                    31u, 27u, 13u, 23u, 21u, 19u, 16u, 7u, 26u, 12u, 18u, 6u, 11u, 5u, 10u, 9u};
-        constexpr int bitPosition(std::uint32_t v) {
-            return deBruijn[(static_cast<std::uint32_t>((v & -v) * 0x077CB531u)) >> 27];
-        }
-
         // TODO: Verify if this info is also valid for the other STM32 chips.
         enum class alternatefunction {
             rtc_50Hz = 0u, mco = 0u, tamper = 0u, swj = 0u, trace = 0u,

@@ -17,6 +17,7 @@
 #ifndef GPIOPIN_H
 #define GPIOPIN_H
 
+#include "byteutils.h"
 #include "stm32types.h"
 
 #include "stm32f4xx.h"
@@ -60,12 +61,12 @@ namespace ecpp {
         public:
 
             static void configure(gpiomode mode) {
-                constexpr unsigned int pin = bitPosition(static_cast<uint32_t>(Pin));
+                constexpr unsigned int pin = utils::bitPosition(static_cast<uint32_t>(Pin));
                 configureImpl(*_gpio, static_cast<unsigned int>(mode), pin);
             }
 
             static void alternate(alternatefunction af) {
-                constexpr unsigned int pin = bitPosition(static_cast<uint32_t>(Pin));
+                constexpr unsigned int pin = utils::bitPosition(static_cast<uint32_t>(Pin));
                 alternateImpl(*_gpio, static_cast<unsigned int>(af), pin);
             }
 
