@@ -17,8 +17,8 @@
 #ifndef GPIOPIN_H
 #define GPIOPIN_H
 
-#include "byteutils.h"
 #include "stm32types.h"
+#include "utils.h"
 
 #include "stm32f4xx.h"
 
