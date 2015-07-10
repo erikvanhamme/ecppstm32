@@ -20,8 +20,6 @@
 #include "rcc.h"
 
 #ifdef stm32f4
-#include "stm32f4types.h"
-
 #include "stm32f4xx.h"
 #endif
 
