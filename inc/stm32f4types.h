@@ -51,6 +51,25 @@ namespace ecpp {
         struct ahb1enr_mask<first, rest...> {
             static constexpr std::uint32_t value = static_cast<std::uint32_t>(first) | ahb1enr_mask<rest...>::value;
         };
+
+        enum class apb1enr : std::uint32_t {
+            tim6 = RCC_APB1ENR_TIM6EN,
+            tim7 = RCC_APB1ENR_TIM7EN
+            // TODO: add other peripheral bits
+        };
+
+        template<apb1enr... M>
+        struct apb1enr_mask;
+
+        template<>
+        struct apb1enr_mask<> {
+            static constexpr std::uint32_t value = 0;
+        };
+
+        template<apb1enr first, apb1enr... rest>
+        struct apb1enr_mask<first, rest...> {
+            static constexpr std::uint32_t value = static_cast<std::uint32_t>(first) | apb1enr_mask<rest...>::value;
+        };
     }
 }
 

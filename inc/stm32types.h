@@ -120,6 +120,11 @@ namespace ecpp {
             dcmi = 13u,
             eventout = 15u,
         };
+
+        enum class basictimer : std::uint32_t {
+            tim6 = TIM6_BASE,
+            tim7 = TIM7_BASE
+        };
     }
 }
 #endif // STM32TYPES_H

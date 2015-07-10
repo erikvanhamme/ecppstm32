@@ -59,6 +59,16 @@ namespace ecpp {
             static void disableClock() {
                 RCC->AHB1ENR &= ~ahb1enr_mask<M...>::value;
             }
+
+            template<apb1enr... M>
+            static void enableClock() {
+                RCC->APB1ENR |= apb1enr_mask<M...>::value;
+            }
+
+            template<apb1enr... M>
+            static void disableClock() {
+                RCC->APB1ENR &= ~apb1enr_mask<M...>::value;
+            }
 #endif
         }
     }
