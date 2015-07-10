@@ -16,10 +16,7 @@ sources += \
 	ecppstm32/src/syscalls.c \
 
 headers += \
-	ecppstm32/inc/basictimer.h \
 	ecppstm32/inc/gpio.h \
 	ecppstm32/inc/rcc.h \
-	ecppstm32/inc/stm32f3types.h \
-	ecppstm32/inc/stm32f4types.h \
-	ecppstm32/inc/stm32types.h \
+	ecppstm32/inc/timer.h \
 

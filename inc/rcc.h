@@ -17,17 +17,13 @@
 #ifndef RCC_H
 #define RCC_H
 
-#include "stm32types.h"
+#include "utils.h"
 
 #ifdef stm32f3
-#include "stm32f3types.h"
-
 #include "stm32f3xx.h"
 #endif
 
 #ifdef stm32f4
-#include "stm32f4types.h"
-
 #include "stm32f4xx.h"
 #endif
 
@@ -35,17 +31,50 @@
 
 namespace ecpp {
     namespace stm32 {
+
+#ifdef stm32f3
+        enum class ahbenr : std::uint32_t {
+            gpioa = RCC_AHBENR_GPIOAEN,
+            gpiob = RCC_AHBENR_GPIOBEN,
+            gpioc = RCC_AHBENR_GPIOCEN,
+            gpiod = RCC_AHBENR_GPIODEN,
+            gpioe = RCC_AHBENR_GPIOEEN,
+            gpiof = RCC_AHBENR_GPIOFEN,
+            // TODO: add other peripheral bits
+        };
+
+#endif
+
+#ifdef stm32f4
+        enum class ahb1enr : std::uint32_t {
+            gpioa = RCC_AHB1ENR_GPIOAEN,
+            gpiob = RCC_AHB1ENR_GPIOBEN,
+            gpioc = RCC_AHB1ENR_GPIOCEN,
+            gpiod = RCC_AHB1ENR_GPIODEN,
+            gpioe = RCC_AHB1ENR_GPIOEEN,
+            gpiof = RCC_AHB1ENR_GPIOFEN,
+            gpiog = RCC_AHB1ENR_GPIOGEN,
+            gpioh = RCC_AHB1ENR_GPIOHEN,
+            gpioi = RCC_AHB1ENR_GPIOIEN
+            // TODO: add other peripheral bits
+        };
+
+        enum class apb1enr : std::uint32_t {
+            tim6 = RCC_APB1ENR_TIM6EN,
+            tim7 = RCC_APB1ENR_TIM7EN
+            // TODO: add other peripheral bits
+        };
+#endif
+
         namespace rcc {
 
 #ifdef stm32f3
-            template<ahbenr... M>
-            static void enableClock() {
-                RCC->AHBENR |= ahbenr_mask<M...>::value;
+            static void enableClock(ahbenr clocks) {
+                RCC->AHBENR |= static_cast<std::uint32_t>(clocks);
             }
 
-            template<ahbenr... M>
-            static void disableClock() {
-                RCC->AHBENR &= ~ahbenr_mask<M...>::value;
+            static void disableClock(ahbenr clocks) {
+                RCC->AHBENR &= ~static_cast<std::uint32_t>(clocks);
             }
 #endif
 
@@ -68,5 +97,20 @@ namespace ecpp {
 #endif
         }
     }
+
+#ifdef stm32f3
+    template<>
+    struct is_bitmask<ecpp::stm32::ahbenr> : std::true_type {};
+
+#endif
+
+#ifdef stm32f4
+    template<>
+    struct is_bitmask<ecpp::stm32::ahb1enr> : std::true_type {};
+
+    template<>
+    struct is_bitmask<ecpp::stm32::apb1enr> : std::true_type {};
+
+#endif
 }
 #endif // RCC_H
