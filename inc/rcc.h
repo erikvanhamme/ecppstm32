@@ -50,24 +50,20 @@ namespace ecpp {
 #endif
 
 #ifdef stm32f4
-            template<ahb1enr... M>
-            static void enableClock() {
-                RCC->AHB1ENR |= ahb1enr_mask<M...>::value;
+            static void enableClock(ahb1enr clocks) {
+                RCC->AHB1ENR |= static_cast<std::uint32_t>(clocks);
             }
 
-            template<ahb1enr... M>
-            static void disableClock() {
-                RCC->AHB1ENR &= ~ahb1enr_mask<M...>::value;
+            static void disableClock(ahb1enr clocks) {
+                RCC->AHB1ENR &= ~static_cast<std::uint32_t>(clocks);
             }
 
-            template<apb1enr... M>
-            static void enableClock() {
-                RCC->APB1ENR |= apb1enr_mask<M...>::value;
+            static void enableClock(apb1enr clocks) {
+                RCC->APB1ENR |= static_cast<std::uint32_t>(clocks);
             }
 
-            template<apb1enr... M>
-            static void disableClock() {
-                RCC->APB1ENR &= ~apb1enr_mask<M...>::value;
+            static void disableClock(apb1enr clocks) {
+                RCC->APB1ENR &= ~static_cast<std::uint32_t>(clocks);
             }
 #endif
         }

@@ -17,6 +17,8 @@
 #ifndef STM32TYPES_H
 #define STM32TYPES_H
 
+#include "utils.h"
+
 #ifdef stm32f3
 #include "stm32f3xx.h"
 #endif
@@ -26,24 +28,10 @@
 #endif
 
 #include <cstdint>
+#include <type_traits>
 
 namespace ecpp {
     namespace stm32 {
-
-        // TODO: find a generic templated way to deal with template prototypes and specialisations for masks
-
-//        template<std::uint32_t... I>
-//        struct mask_or;
-
-//        template<>
-//        struct mask_or<> {
-//            static constexpr std::uint32_t value = 0;
-//        };
-
-//        template<std::uint32_t first, std::uint32_t... rest>
-//        struct mask_or<first, rest...> {
-//            static constexpr std::uint32_t value = first | mask_or<rest...>::value;
-//        };
 
         enum class gpioport : std::uint32_t {
             pa = GPIOA_BASE,
@@ -76,19 +64,6 @@ namespace ecpp {
             p13 = (1 << 13),
             p14 = (1 << 14),
             p15 = (1 << 15),
-        };
-
-        template<gpiopin... M>
-        struct gpiopin_mask;
-
-        template<>
-        struct gpiopin_mask<> {
-            static constexpr std::uint32_t value = 0;
-        };
-
-        template<gpiopin first, gpiopin... rest>
-        struct gpiopin_mask<first, rest...> {
-            static constexpr std::uint32_t value = static_cast<std::uint32_t>(first) | gpiopin_mask<rest...>::value;
         };
 
         enum class gpiomode {
@@ -126,5 +101,8 @@ namespace ecpp {
             tim7 = TIM7_BASE
         };
     }
+
+    template<>
+    struct is_bitmask<ecpp::stm32::gpiopin> : std::true_type {};
 }
 #endif // STM32TYPES_H

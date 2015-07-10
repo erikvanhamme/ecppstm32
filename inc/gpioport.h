@@ -62,31 +62,31 @@ namespace ecpp {
 #ifdef stm32f4
                 switch(P) {
                 case gpioport::pa:
-                    rcc::enableClock<ahb1enr::gpioa>();
+                    rcc::enableClock(ahb1enr::gpioa);
                     break;
                 case gpioport::pb:
-                    rcc::enableClock<ahb1enr::gpiob>();
+                    rcc::enableClock(ahb1enr::gpiob);
                     break;
                 case gpioport::pc:
-                    rcc::enableClock<ahb1enr::gpioc>();
+                    rcc::enableClock(ahb1enr::gpioc);
                     break;
                 case gpioport::pd:
-                    rcc::enableClock<ahb1enr::gpiod>();
+                    rcc::enableClock(ahb1enr::gpiod);
                     break;
                 case gpioport::pe:
-                    rcc::enableClock<ahb1enr::gpioe>();
+                    rcc::enableClock(ahb1enr::gpioe);
                     break;
                 case gpioport::pf:
-                    rcc::enableClock<ahb1enr::gpiof>();
+                    rcc::enableClock(ahb1enr::gpiof);
                     break;
                 case gpioport::pg:
-                    rcc::enableClock<ahb1enr::gpiog>();
+                    rcc::enableClock(ahb1enr::gpiog);
                     break;
                 case gpioport::ph:
-                    rcc::enableClock<ahb1enr::gpioh>();
+                    rcc::enableClock(ahb1enr::gpioh);
                     break;
                 case gpioport::pi:
-                    rcc::enableClock<ahb1enr::gpioi>();
+                    rcc::enableClock(ahb1enr::gpioi);
                     break;
                 }
 #endif
@@ -118,31 +118,31 @@ namespace ecpp {
 #ifdef stm32f4
                 switch(P) {
                 case gpioport::pa:
-                    rcc::disableClock<ahb1enr::gpioa>();
+                    rcc::disableClock(ahb1enr::gpioa);
                     break;
                 case gpioport::pb:
-                    rcc::disableClock<ahb1enr::gpiob>();
+                    rcc::disableClock(ahb1enr::gpiob);
                     break;
                 case gpioport::pc:
-                    rcc::disableClock<ahb1enr::gpioc>();
+                    rcc::disableClock(ahb1enr::gpioc);
                     break;
                 case gpioport::pd:
-                    rcc::disableClock<ahb1enr::gpiod>();
+                    rcc::disableClock(ahb1enr::gpiod);
                     break;
                 case gpioport::pe:
-                    rcc::disableClock<ahb1enr::gpioe>();
+                    rcc::disableClock(ahb1enr::gpioe);
                     break;
                 case gpioport::pf:
-                    rcc::disableClock<ahb1enr::gpiof>();
+                    rcc::disableClock(ahb1enr::gpiof);
                     break;
                 case gpioport::pg:
-                    rcc::disableClock<ahb1enr::gpiog>();
+                    rcc::disableClock(ahb1enr::gpiog);
                     break;
                 case gpioport::ph:
-                    rcc::disableClock<ahb1enr::gpioh>();
+                    rcc::disableClock(ahb1enr::gpioh);
                     break;
                 case gpioport::pi:
-                    rcc::disableClock<ahb1enr::gpioi>();
+                    rcc::disableClock(ahb1enr::gpioi);
                     break;
                 }
 #endif
@@ -152,18 +152,16 @@ namespace ecpp {
                 return _gpio->IDR;
             }
 
-            static void set(std::uint32_t value) {
-                _gpio->ODR = value;
+            static void set(gpiopin pins) {
+                _gpio->ODR = static_cast<std::uint32_t>(pins);
             }
 
-            template<gpiopin... M>
-            static void high() {
-                _gpio->ODR |= gpiopin_mask<M...>::value;
+            static void high(gpiopin pins) {
+                _gpio->ODR |= static_cast<std::uint32_t>(pins);
             }
 
-            template<gpiopin... M>
-            static void low() {
-                _gpio->ODR &= ~gpiopin_mask<M...>::value;
+            static void low(gpiopin pins) {
+                _gpio->ODR &= ~static_cast<std::uint32_t>(pins);
             }
 
         private:

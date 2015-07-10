@@ -35,10 +35,10 @@ namespace ecpp {
             static void enable() {
                 switch (T) {
                 case basictimer::tim6:
-                    rcc::enableClock<apb1enr::tim6>();
+                    rcc::enableClock(apb1enr::tim6);
                     break;
                 case basictimer::tim7:
-                    rcc::enableClock<apb1enr::tim7>();
+                    rcc::enableClock(apb1enr::tim7);
                     break;
                 }
             }
@@ -46,10 +46,10 @@ namespace ecpp {
             static void disable() {
                 switch (T) {
                 case basictimer::tim6:
-                    rcc::disableClock<apb1enr::tim6>();
+                    rcc::disableClock(apb1enr::tim6);
                     break;
                 case basictimer::tim7:
-                    rcc::disableClock<apb1enr::tim7>();
+                    rcc::disableClock(apb1enr::tim7);
                     break;
                 }
             }
