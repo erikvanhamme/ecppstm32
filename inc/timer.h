@@ -19,6 +19,10 @@
 
 #include "rcc.h"
 
+#ifdef stm32f3
+#include "stm32f3xx.h"
+#endif
+
 #ifdef stm32f4
 #include "stm32f4xx.h"
 #endif

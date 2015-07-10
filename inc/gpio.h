@@ -175,22 +175,22 @@ namespace ecpp {
 #ifdef stm32f3
                 switch(P) {
                 case gpioport::pa:
-                    rcc::enableClock<ahbenr::gpioa>();
+                    rcc::enableClock(ahbenr::gpioa);
                     break;
                 case gpioport::pb:
-                    rcc::enableClock<ahbenr::gpiob>();
+                    rcc::enableClock(ahbenr::gpiob);
                     break;
                 case gpioport::pc:
-                    rcc::enableClock<ahbenr::gpioc>();
+                    rcc::enableClock(ahbenr::gpioc);
                     break;
                 case gpioport::pd:
-                    rcc::enableClock<ahbenr::gpiod>();
+                    rcc::enableClock(ahbenr::gpiod);
                     break;
                 case gpioport::pe:
-                    rcc::enableClock<ahbenr::gpioe>();
+                    rcc::enableClock(ahbenr::gpioe);
                     break;
                 case gpioport::pf:
-                    rcc::enableClock<ahbenr::gpiof>();
+                    rcc::enableClock(ahbenr::gpiof);
                     break;
                 }
 #endif
@@ -231,22 +231,22 @@ namespace ecpp {
 #ifdef stm32f3
                 switch(P) {
                 case gpioport::pa:
-                    rcc::disableClock<ahbenr::gpioa>();
+                    rcc::disableClock(ahbenr::gpioa);
                     break;
                 case gpioport::pb:
-                    rcc::disableClock<ahbenr::gpiob>();
+                    rcc::disableClock(ahbenr::gpiob);
                     break;
                 case gpioport::pc:
-                    rcc::disableClock<ahbenr::gpioc>();
+                    rcc::disableClock(ahbenr::gpioc);
                     break;
                 case gpioport::pd:
-                    rcc::disableClock<ahbenr::gpiod>();
+                    rcc::disableClock(ahbenr::gpiod);
                     break;
                 case gpioport::pe:
-                    rcc::disableClock<ahbenr::gpioe>();
+                    rcc::disableClock(ahbenr::gpioe);
                     break;
                 case gpioport::pf:
-                    rcc::disableClock<ahbenr::gpiof>();
+                    rcc::disableClock(ahbenr::gpiof);
                     break;
                 }
 #endif

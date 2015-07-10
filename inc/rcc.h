@@ -32,6 +32,12 @@
 namespace ecpp {
     namespace stm32 {
 
+        enum class apb1enr : std::uint32_t {
+            tim6 = RCC_APB1ENR_TIM6EN,
+            tim7 = RCC_APB1ENR_TIM7EN
+            // TODO: add other peripheral bits
+        };
+
 #ifdef stm32f3
         enum class ahbenr : std::uint32_t {
             gpioa = RCC_AHBENR_GPIOAEN,
@@ -42,7 +48,6 @@ namespace ecpp {
             gpiof = RCC_AHBENR_GPIOFEN,
             // TODO: add other peripheral bits
         };
-
 #endif
 
 #ifdef stm32f4
@@ -58,15 +63,17 @@ namespace ecpp {
             gpioi = RCC_AHB1ENR_GPIOIEN
             // TODO: add other peripheral bits
         };
-
-        enum class apb1enr : std::uint32_t {
-            tim6 = RCC_APB1ENR_TIM6EN,
-            tim7 = RCC_APB1ENR_TIM7EN
-            // TODO: add other peripheral bits
-        };
 #endif
 
         namespace rcc {
+
+            static void enableClock(apb1enr clocks) {
+                RCC->APB1ENR |= static_cast<std::uint32_t>(clocks);
+            }
+
+            static void disableClock(apb1enr clocks) {
+                RCC->APB1ENR &= ~static_cast<std::uint32_t>(clocks);
+            }
 
 #ifdef stm32f3
             static void enableClock(ahbenr clocks) {
@@ -86,31 +93,22 @@ namespace ecpp {
             static void disableClock(ahb1enr clocks) {
                 RCC->AHB1ENR &= ~static_cast<std::uint32_t>(clocks);
             }
-
-            static void enableClock(apb1enr clocks) {
-                RCC->APB1ENR |= static_cast<std::uint32_t>(clocks);
-            }
-
-            static void disableClock(apb1enr clocks) {
-                RCC->APB1ENR &= ~static_cast<std::uint32_t>(clocks);
-            }
 #endif
         }
     }
 
+    template<>
+    struct is_bitmask<ecpp::stm32::apb1enr> : std::true_type {};
+
 #ifdef stm32f3
     template<>
     struct is_bitmask<ecpp::stm32::ahbenr> : std::true_type {};
-
 #endif
 
 #ifdef stm32f4
     template<>
     struct is_bitmask<ecpp::stm32::ahb1enr> : std::true_type {};
-
-    template<>
-    struct is_bitmask<ecpp::stm32::apb1enr> : std::true_type {};
-
 #endif
+
 }
 #endif // RCC_H
