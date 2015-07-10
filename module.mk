@@ -17,8 +17,7 @@ sources += \
 
 headers += \
 	ecppstm32/inc/basictimer.h \
-	ecppstm32/inc/gpiopin.h \
-	ecppstm32/inc/gpioport.h \
+	ecppstm32/inc/gpio.h \
 	ecppstm32/inc/rcc.h \
 	ecppstm32/inc/stm32f3types.h \
 	ecppstm32/inc/stm32f4types.h \
