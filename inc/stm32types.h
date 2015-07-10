@@ -17,7 +17,13 @@
 #ifndef STM32TYPES_H
 #define STM32TYPES_H
 
+#ifdef stm32f3
+#include "stm32f3xx.h"
+#endif
+
+#ifdef stm32f4
 #include "stm32f4xx.h"
+#endif
 
 #include <cstdint>
 
@@ -26,6 +32,19 @@ namespace ecpp {
 
         // TODO: find a generic templated way to deal with template prototypes and specialisations for masks
 
+//        template<std::uint32_t... I>
+//        struct mask_or;
+
+//        template<>
+//        struct mask_or<> {
+//            static constexpr std::uint32_t value = 0;
+//        };
+
+//        template<std::uint32_t first, std::uint32_t... rest>
+//        struct mask_or<first, rest...> {
+//            static constexpr std::uint32_t value = first | mask_or<rest...>::value;
+//        };
+
         enum class gpioport : std::uint32_t {
             pa = GPIOA_BASE,
             pb = GPIOB_BASE,
@@ -33,44 +52,30 @@ namespace ecpp {
             pd = GPIOD_BASE,
             pe = GPIOE_BASE,
             pf = GPIOF_BASE,
+#ifdef stm32f4
             pg = GPIOG_BASE,
             ph = GPIOH_BASE,
-            pi = GPIOI_BASE
-        };
-
-        enum class ahb1enr : std::uint32_t {
-            gpioa = RCC_AHB1ENR_GPIOAEN,
-            gpiob = RCC_AHB1ENR_GPIOBEN,
-            gpioc = RCC_AHB1ENR_GPIOCEN,
-            gpiod = RCC_AHB1ENR_GPIODEN,
-            gpioe = RCC_AHB1ENR_GPIOEEN,
-            gpiof = RCC_AHB1ENR_GPIOFEN,
-            gpiog = RCC_AHB1ENR_GPIOGEN,
-            gpioh = RCC_AHB1ENR_GPIOHEN,
-            gpioi = RCC_AHB1ENR_GPIOIEN
-            // TODO: add other peripheral bits
-        };
-
-        template<ahb1enr... M>
-        struct ahb1enr_mask;
-
-        template<>
-        struct ahb1enr_mask<> {
-            static constexpr std::uint32_t value = 0;
-        };
-
-        template<ahb1enr first, ahb1enr... rest>
-        struct ahb1enr_mask<first, rest...> {
-            static constexpr std::uint32_t value = static_cast<std::uint32_t>(first) | ahb1enr_mask<rest...>::value;
+            pi = GPIOI_BASE,
+#endif
         };
 
         enum class gpiopin : std::uint32_t {
-            p0 = GPIO_IDR_IDR_0,
-            // TODO: add other pins
-            p12 = GPIO_IDR_IDR_12,
-            p13 = GPIO_IDR_IDR_13,
-            p14 = GPIO_IDR_IDR_14,
-            p15 = GPIO_IDR_IDR_15
+            p0 = (1 << 0),
+            p1 = (1 << 1),
+            p2 = (1 << 2),
+            p3 = (1 << 3),
+            p4 = (1 << 4),
+            p5 = (1 << 5),
+            p6 = (1 << 6),
+            p7 = (1 << 7),
+            p8 = (1 << 8),
+            p9 = (1 << 9),
+            p10 = (1 << 10),
+            p11 = (1 << 11),
+            p12 = (1 << 12),
+            p13 = (1 << 13),
+            p14 = (1 << 14),
+            p15 = (1 << 15),
         };
 
         template<gpiopin... M>

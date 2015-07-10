@@ -20,7 +20,13 @@
 #include "rcc.h"
 #include "stm32types.h"
 
+#ifdef stm32f3
+#include "stm32f3xx.h"
+#endif
+
+#ifdef stm32f4
 #include "stm32f4xx.h"
+#endif
 
 #include <cstdint>
 
@@ -31,6 +37,29 @@ namespace ecpp {
         public:
 
             static void enable() {
+#ifdef stm32f3
+                switch(P) {
+                case gpioport::pa:
+                    rcc::enableClock<ahbenr::gpioa>();
+                    break;
+                case gpioport::pb:
+                    rcc::enableClock<ahbenr::gpiob>();
+                    break;
+                case gpioport::pc:
+                    rcc::enableClock<ahbenr::gpioc>();
+                    break;
+                case gpioport::pd:
+                    rcc::enableClock<ahbenr::gpiod>();
+                    break;
+                case gpioport::pe:
+                    rcc::enableClock<ahbenr::gpioe>();
+                    break;
+                case gpioport::pf:
+                    rcc::enableClock<ahbenr::gpiof>();
+                    break;
+                }
+#endif
+#ifdef stm32f4
                 switch(P) {
                 case gpioport::pa:
                     rcc::enableClock<ahb1enr::gpioa>();
@@ -60,9 +89,33 @@ namespace ecpp {
                     rcc::enableClock<ahb1enr::gpioi>();
                     break;
                 }
+#endif
             }
 
             static void disable() {
+#ifdef stm32f3
+                switch(P) {
+                case gpioport::pa:
+                    rcc::disableClock<ahbenr::gpioa>();
+                    break;
+                case gpioport::pb:
+                    rcc::disableClock<ahbenr::gpiob>();
+                    break;
+                case gpioport::pc:
+                    rcc::disableClock<ahbenr::gpioc>();
+                    break;
+                case gpioport::pd:
+                    rcc::disableClock<ahbenr::gpiod>();
+                    break;
+                case gpioport::pe:
+                    rcc::disableClock<ahbenr::gpioe>();
+                    break;
+                case gpioport::pf:
+                    rcc::disableClock<ahbenr::gpiof>();
+                    break;
+                }
+#endif
+#ifdef stm32f4
                 switch(P) {
                 case gpioport::pa:
                     rcc::disableClock<ahb1enr::gpioa>();
@@ -92,6 +145,7 @@ namespace ecpp {
                     rcc::disableClock<ahb1enr::gpioi>();
                     break;
                 }
+#endif
             }
 
             static std::uint32_t get() {

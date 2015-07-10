@@ -19,7 +19,17 @@
 
 #include "stm32types.h"
 
+#ifdef stm32f3
+#include "stm32f3types.h"
+
+#include "stm32f3xx.h"
+#endif
+
+#ifdef stm32f4
+#include "stm32f4types.h"
+
 #include "stm32f4xx.h"
+#endif
 
 #include <cstdint>
 
@@ -27,6 +37,19 @@ namespace ecpp {
     namespace stm32 {
         namespace rcc {
 
+#ifdef stm32f3
+            template<ahbenr... M>
+            static void enableClock() {
+                RCC->AHBENR |= ahbenr_mask<M...>::value;
+            }
+
+            template<ahbenr... M>
+            static void disableClock() {
+                RCC->AHBENR &= ~ahbenr_mask<M...>::value;
+            }
+#endif
+
+#ifdef stm32f4
             template<ahb1enr... M>
             static void enableClock() {
                 RCC->AHB1ENR |= ahb1enr_mask<M...>::value;
@@ -36,6 +59,7 @@ namespace ecpp {
             static void disableClock() {
                 RCC->AHB1ENR &= ~ahb1enr_mask<M...>::value;
             }
+#endif
         }
     }
 }

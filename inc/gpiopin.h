@@ -20,7 +20,13 @@
 #include "stm32types.h"
 #include "utils.h"
 
+#ifdef stm32f3
+#include "stm32f3xx.h"
+#endif
+
+#ifdef stm32f4
 #include "stm32f4xx.h"
+#endif
 
 #include <cstdint>
 
@@ -61,12 +67,12 @@ namespace ecpp {
         public:
 
             static void configure(gpiomode mode) {
-                constexpr unsigned int pin = utils::bitPosition(static_cast<uint32_t>(Pin));
+                constexpr unsigned int pin = utils::bitPosition(static_cast<std::uint32_t>(Pin));
                 configureImpl(*_gpio, static_cast<unsigned int>(mode), pin);
             }
 
             static void alternate(alternatefunction af) {
-                constexpr unsigned int pin = utils::bitPosition(static_cast<uint32_t>(Pin));
+                constexpr unsigned int pin = utils::bitPosition(static_cast<std::uint32_t>(Pin));
                 alternateImpl(*_gpio, static_cast<unsigned int>(af), pin);
             }
 
@@ -75,11 +81,18 @@ namespace ecpp {
             }
 
             static void high() {
+                // TODO: read datasheet to determine if it is better to use the bit set/reset register.
                 _gpio->ODR |= static_cast<std::uint32_t>(Pin);
             }
 
             static void low() {
+                // TODO: read datasheet to determine if it is better to use the bit set/reset register.
                 _gpio->ODR &= ~static_cast<std::uint32_t>(Pin);
+            }
+
+            static void toggle() {
+                // TODO: read datasheet to determine if it is better to use the bit set/reset register.
+                _gpio->ODR ^= static_cast<std::uint32_t>(Pin);
             }
 
         private:

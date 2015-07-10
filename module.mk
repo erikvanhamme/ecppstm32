@@ -13,10 +13,13 @@
 # limitations under the License.
 
 sources += \
+	ecppstm32/src/syscalls.c \
 
 headers += \
 	ecppstm32/inc/gpiopin.h \
 	ecppstm32/inc/gpioport.h \
 	ecppstm32/inc/rcc.h \
+	ecppstm32/inc/stm32f3types.h \
+	ecppstm32/inc/stm32f4types.h \
 	ecppstm32/inc/stm32types.h \
 
