@@ -17,6 +17,9 @@
 #ifndef GPIO_H
 #define GPIO_H
 
+#include "rcc.h"
+#include "utils.h"
+
 #ifdef stm32f3
 #include "stm32f3xx.h"
 #endif

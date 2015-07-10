@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef BASICTIMER_H
-#define BASICTIMER_H
+#ifndef TIMER_H
+#define TIMER_H
 
 #include "rcc.h"
 
@@ -27,6 +27,11 @@
 
 namespace ecpp {
     namespace stm32 {
+
+        enum class basictimer : std::uint32_t {
+            tim6 = TIM6_BASE,
+            tim7 = TIM7_BASE
+        };
 
         template<basictimer T>
         class BasicTimer {
@@ -118,4 +123,4 @@ namespace ecpp {
     }
 }
 
-#endif // BASICTIMER_H
+#endif // TIMER_H
