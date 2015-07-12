@@ -143,7 +143,7 @@ private:
     static constexpr TimerDmarq_e _dmarq_general_purpose = _dmarq_basic | TimerDmarq_e::TRIGGER;
     static constexpr TimerDmarq_e _dmarq_advanced_control = _dmarq_general_purpose;
 
-    static constexpr TimerDmarq_e _dmarq = is_dmarq<T>::value ?
+    static constexpr TimerDmarq_e _dmarq = is_dmarq_capable<T>::value ?
                 is_advanced_control<T>::value ? _dmarq_advanced_control :
                 is_general_purpose<T>::value ? _dmarq_general_purpose :
                 _dmarq_basic : TimerDmarq_e(0);
