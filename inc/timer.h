@@ -27,24 +27,107 @@
 #include "stm32f4xx.h"
 #endif
 
+#include <cstdint>
+#include <type_traits>
+
 namespace ecpp {
     namespace stm32 {
+        namespace irqen {
 
-        enum class basictimer : std::uint32_t {
+            enum class timer_basic_e {
+                update = TIM_DIER_UIE,
+            };
+
+            enum class timer_general_purpose_e {
+                update = TIM_DIER_UIE,
+                // TODO: Add other interrupts supported by GP timer.
+            };
+
+            enum class timer_advanced_control_e {
+                update = TIM_DIER_UIE,
+                // TODO: add other interrupts supported by AC timer.
+            };
+        }
+
+        namespace irqflag {
+
+            enum class timer_basic_e {
+                update = TIM_SR_UIF,
+            };
+
+            enum class timer_general_purpose_e {
+                update = TIM_SR_UIF,
+            };
+
+            enum class timer_advanced_control_e {
+                update = TIM_SR_UIF,
+            };
+        }
+
+        enum class timer_e : std::uint32_t {
+            tim1 = TIM1_BASE,
+            // TODO: Add other timers.
             tim6 = TIM6_BASE,
-            tim7 = TIM7_BASE
+            tim7 = TIM7_BASE,
+            tim8 = TIM8_BASE,
+            // TODO: Add other timers.
         };
 
-        template<basictimer T>
-        class BasicTimer {
+        template<timer_e>
+        struct is_basic : std::false_type {};
+
+        template<>
+        struct is_basic<timer_e::tim6> : std::true_type {};
+
+        template<>
+        struct is_basic<timer_e::tim7> : std::true_type {};
+
+        template<timer_e>
+        struct is_general_purpose : std::false_type {};
+
+        // TODO: Add type traits for general purpose timers.
+
+        template<timer_e>
+        struct is_advanced_control : std::false_type {};
+
+        // TODO: Add type traits for advanced control timers.
+
+        template<timer_e T>
+        class Timer {
         public:
+
+            static_assert(is_basic<T>::value || is_general_purpose<T>::value || is_advanced_control<T>::value, "Unsupported timer.");
+
+            /* This conditionally defines irqen_e to be:
+             *      irqen::timer_advanced_control_e   if is_advanced_control<T>::value   == true;
+             *      irqen::timer_general_purpose_e    if is_general_purpose<T>::value    == true;
+             *      irqen::timer_basic_e              if is_basic<T>::value              == true;
+             */
+            typedef
+                typename std::conditional<is_advanced_control<T>::value, irqen::timer_advanced_control_e,
+                    typename std::conditional<is_general_purpose<T>::value, irqen::timer_general_purpose_e, irqen::timer_basic_e
+                    >::type
+                >::type
+            irqen_e;
+
+            /* This conditionally defines irqflag_e to be:
+             *      irqflag::timer_advanced_control_e   if is_advanced_control<T>::value   == true;
+             *      irqflag::timer_general_purpose_e    if is_general_purpose<T>::value    == true;
+             *      irqflag::timer_basic_e              if is_basic<T>::value              == true;
+             */
+            typedef
+                typename std::conditional<is_advanced_control<T>::value, irqflag::timer_advanced_control_e,
+                    typename std::conditional<is_general_purpose<T>::value, irqflag::timer_general_purpose_e, irqflag::timer_basic_e
+                    >::type
+                >::type
+            irqflag_e;
 
             static void enable() {
                 switch (T) {
-                case basictimer::tim6:
+                case timer_e::tim6:
                     rcc::enableClock(apb1enr::tim6);
                     break;
-                case basictimer::tim7:
+                case timer_e::tim7:
                     rcc::enableClock(apb1enr::tim7);
                     break;
                 }
@@ -52,10 +135,10 @@ namespace ecpp {
 
             static void disable() {
                 switch (T) {
-                case basictimer::tim6:
+                case timer_e::tim6:
                     rcc::disableClock(apb1enr::tim6);
                     break;
-                case basictimer::tim7:
+                case timer_e::tim7:
                     rcc::disableClock(apb1enr::tim7);
                     break;
                 }
@@ -82,25 +165,7 @@ namespace ecpp {
                 _timer->EGR = TIM_EGR_UG;
             }
 
-            // TODO: find templated way to do this. (More interrupt types)
-            static void setUpdateInterruptEvent(bool enabled) {
-                if (enabled == true) {
-                    _timer->DIER |= TIM_DIER_UIE;
-                } else {
-                    _timer->DIER &= ~TIM_DIER_UIE;
-                }
-            }
-
-            // TODO: find templated way to do this. (More interrupt types)
-            static bool isUpdateInterruptFlag() {
-                return (_timer->SR & TIM_SR_UIF);
-            }
-
-            // TODO: find templated way to do this. (More interrupt types)
-            static void clearUpdateInterruptFlag() {
-                _timer->SR &= ~TIM_SR_UIF;
-            }
-
+            // TODO: handle this the same way as the irq's.
             static void setUpdateDmaEvent(bool enabled) {
                 if (enabled == true) {
                     _timer->DIER |= TIM_DIER_UDE;
@@ -109,6 +174,7 @@ namespace ecpp {
                 }
             }
 
+            // TODO: Find good way to handle this.
             static void setPeriodBuffered(bool enabled) {
                 if (enabled == true) {
                     _timer->CR1 |= TIM_CR1_ARPE;
@@ -117,12 +183,31 @@ namespace ecpp {
                 }
             }
 
+            static void enableIrq(irqen_e irq) {
+                _timer->DIER |= static_cast<std::uint32_t>(irq);
+            }
+
+            static void disableIrq(irqen_e irq) {
+                _timer->DIER &= ~static_cast<std::uint32_t>(irq);
+            }
+
+            static bool isSet(irqflag_e irqflag) {
+                return _timer->SR & static_cast<std::uint32_t>(irqflag);
+            }
+
+            static void clear(irqflag_e irqflag) {
+                _timer->SR &= ~static_cast<std::uint32_t>(irqflag);
+            }
+
         private:
             static constexpr TIM_TypeDef *_timer = reinterpret_cast<TIM_TypeDef *>(T);
 
-            BasicTimer() = delete;
+            Timer() = delete;
         };
     }
+
+    template<>
+    struct is_bitmask<ecpp::stm32::irqen::timer_basic_e> : std::true_type {};
 }
 
 #endif // TIMER_H
