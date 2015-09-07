@@ -62,6 +62,66 @@ struct is_dmarq_capable<Timer_e::TIMER7> : std::true_type {};
 
 // TODO: Add type traits for dmarq capable timers.
 
+/**
+ * @brier Type trait for checking if a Timer_e value is a 32bit timer.
+ */
+template<Timer_e>
+struct is_32bit : std::false_type {};
+
+/**
+ * @brief Type trait confirming that Timer_e::TIMER2 is a 32bit timer.
+ */
+template<>
+struct is_32bit<Timer_e::TIMER2> : std::true_type {};
+
+/**
+ * @brief Type trait confirming that Timer_e::TIMER5 is a 32bit timer.
+ */
+template<>
+struct is_32bit<Timer_e::TIMER5> : std::true_type {};
+
+/**
+ * @brier Type trait for checking if a Timer_e value is multidirectional.
+ */
+template<Timer_e>
+struct is_multidir : std::false_type {};
+
+/**
+ * @brief Type trait confirming that Timer_e::TIMER1 is a multidirectional timer.
+ */
+template<>
+struct is_multidir<Timer_e::TIMER1> : std::true_type {};
+
+/**
+ * @brief Type trait confirming that Timer_e::TIMER2 is a multidirectional timer.
+ */
+template<>
+struct is_multidir<Timer_e::TIMER2> : std::true_type {};
+
+/**
+ * @brief Type trait confirming that Timer_e::TIMER3 is a multidirectional timer.
+ */
+template<>
+struct is_multidir<Timer_e::TIMER3> : std::true_type {};
+
+/**
+ * @brief Type trait confirming that Timer_e::TIMER4 is a multidirectional timer.
+ */
+template<>
+struct is_multidir<Timer_e::TIMER4> : std::true_type {};
+
+/**
+ * @brief Type trait confirming that Timer_e::TIMER5 is a multidirectional timer.
+ */
+template<>
+struct is_multidir<Timer_e::TIMER5> : std::true_type {};
+
+/**
+ * @brief Type trait confirming that Timer_e::TIMER8 is a multidirectional timer.
+ */
+template<>
+struct is_multidir<Timer_e::TIMER8> : std::true_type {};
+
 } // end of ecpp::stm32
 
 /**

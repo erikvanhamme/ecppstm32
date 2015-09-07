@@ -35,7 +35,7 @@ namespace ecpp {
 namespace stm32 {
 
 template<Timer_e T>
-class Timer final {
+class Timer {
 public:
 
     static_assert(is_advanced_control<T>::value || is_general_purpose<T>::value || is_basic<T>::value, "Unsupported timer specified.");
@@ -70,20 +70,21 @@ public:
         _timer->CR2 &= ~TIM_CR1_CEN;
     }
 
-    static void configure(unsigned int period, unsigned int prescaler = 0) {
-        _timer->ARR = static_cast<std::uint32_t>(period) & 0xffff;
-        _timer->PSC = static_cast<std::uint32_t>(prescaler) & 0xffff;
+    static void configure(typename std::conditional<is_32bit<T>::value, std::uint32_t, std::uint16_t>::type period, std::uint16_t prescaler = 0) {
+        _timer->ARR = period;
+        _timer->PSC = prescaler;
+        // TODO: consider more default configuration.
     }
 
-    static void updatePeriod(unsigned int period) {
-        _timer->ARR = static_cast<std::uint32_t>(period) & 0xffff;
+    static void updatePeriod(typename std::conditional<is_32bit<T>::value, std::uint32_t, std::uint16_t>::type period) {
+        _timer->ARR = period;
     }
 
     static void generateUpdateEvent() {
         _timer->EGR = TIM_EGR_UG;
     }
 
-    // TODO: Find good way to handle this.
+    // TODO: Remove this method once the using classes are built.
     static void setPeriodBuffered(bool enabled) {
         if (enabled == true) {
             _timer->CR1 |= TIM_CR1_ARPE;
@@ -151,6 +152,19 @@ private:
 
     Timer() = delete;
 };
+
+template<Timer_e T>
+class PwmGenerator final : public Timer<T> {
+public:
+
+    static_assert(is_general_purpose<T>::value || is_advanced_control<T>::value, "Only general purpose or advanced control timers can be PWM generators.");
+
+
+private:
+    PwmGenerator() = delete;
+};
+
+
 } // end of ecpp::stm32
 } // end of ecpp
 
