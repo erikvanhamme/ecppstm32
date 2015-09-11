@@ -13,6 +13,7 @@
 # limitations under the License.
 
 sources += \
+	ecppstm32/src/cppstubs.cpp \
 	ecppstm32/src/syscalls.c \
 
 headers += \
