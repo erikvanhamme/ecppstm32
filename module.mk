@@ -16,10 +16,5 @@ sources += \
 	ecppstm32/src/cppstubs.cpp \
 	ecppstm32/src/syscalls.c \
 
-headers += \
-	ecppstm32/inc/gpio.h \
-	ecppstm32/inc/rcc.h \
-	ecppstm32/inc/stm32_traits.h \
-	ecppstm32/inc/stm32_types.h \
-	ecppstm32/inc/timer.h \
+includes += ecppstm32/inc
 
